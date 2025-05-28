@@ -1,13 +1,15 @@
 #!/bin/bash
-
 set -e
 
-echo "🔧 Initialisation Terraform..."
-cd infrastructure || exit 1
-terraform init -input=false
+echo "🧹 Nettoyage du dépôt ECR..."
+IMAGE_IDS=$(aws ecr list-images --repository-name "$ECR_REPO_NAME" --region "$AWS_DEFAULT_REGION" --query 'imageIds[*]' --output json)
 
-echo "📋 Plan Terraform..."
-terraform plan -out=tfplan
+if [[ "$IMAGE_IDS" != "[]" ]]; then
+  aws ecr batch-delete-image --repository-name "$ECR_REPO_NAME" --region "$AWS_DEFAULT_REGION" --image-ids "$IMAGE_IDS"
+else
+  echo "✅ Aucun tag à supprimer."
+fi
 
-echo "🚀 Apply Terraform..."
-terraform apply -auto-approve tfplan
+echo "🧨 Destruction de l'infrastructure Terraform..."
+terraform init
+terraform destroy --auto-approve

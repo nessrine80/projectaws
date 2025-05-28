@@ -6,5 +6,8 @@ echo "🔧 Initialisation Terraform..."
 cd infrastructure || exit 1
 terraform init -input=false
 
-echo "💣 Destroy Terraform..."
-terraform destroy -auto-approve
+echo "📋 Plan Terraform..."
+terraform plan -out=tfplan
+
+echo "🚀 Apply Terraform..."
+terraform apply -auto-approve tfplan

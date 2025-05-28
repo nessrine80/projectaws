@@ -1,0 +1,40 @@
+name: Setup Monitoring (Prometheus & Grafana)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  monitoring:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: monitoring
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.24.0"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name hr-stag-eksdemo1 --region ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.3
+
+      - name: Run install_monitoring.sh
+        run: |
+          chmod +x ./install_monitoring.sh
+          ./install_monitoring.sh
