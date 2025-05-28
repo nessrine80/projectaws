@@ -1,10 +1,13 @@
 #!/bin/bash
 
-set -euo pipefail
+set -e
 
-echo "🧨 Terraform destroy en cours..."
+echo "🔧 Initialisation Terraform..."
+cd infrastructure || exit 1
+terraform init -input=false
 
-terraform destroy -var-file="terraform.tfvars" -auto-approve
+echo "📋 Plan Terraform..."
+terraform plan -out=tfplan
 
-echo "✅ Infrastructure détruite avec succès."
-
+echo "🚀 Apply Terraform..."
+terraform apply -auto-approve tfplan

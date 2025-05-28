@@ -1,22 +1,10 @@
 #!/bin/bash
 
-set -euo pipefail
+set -e
 
-# Variables
-ENV=${1:-default}
-TFVARS_FILE="terraform.tfvars"
-WORKDIR="$(dirname "$0")"
-
-# Entrer dans le dossier
-cd "$WORKDIR"
-
-echo "🔁 Initialisation de Terraform..."
+echo "🔧 Initialisation Terraform..."
+cd infrastructure || exit 1
 terraform init -input=false
 
-echo "🔍 Planification de l'infrastructure..."
-terraform plan -var-file="$TFVARS_FILE" -out=tfplan.out
-
-echo "🚀 Application de l'infrastructure..."
-terraform apply -input=false tfplan.out
-
-echo "✅ Déploiement terminé."
+echo "💣 Destroy Terraform..."
+terraform destroy -auto-approve
