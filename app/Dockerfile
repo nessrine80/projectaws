@@ -1,18 +1,22 @@
-FROM ubuntu
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Python and pip
-RUN apt update && apt install -y python3 python3-pip
+RUN apt update && \
+    apt install -y python3 python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy app source code
+# Copy application source code
 COPY backend /backend
 COPY frontend /frontend
 
-# Install Python packages with override
+# Install Python packages
 RUN pip3 install --break-system-packages -r /backend/requirements.txt
 
-# Set working directory (optional but cleaner)
+# Set working directory
 WORKDIR /backend
-EXPOSE 8080
-# Run the backend app
-CMD ["python3", "app.py"]
 
+EXPOSE 8080
+
+CMD ["python3", "app.py"]
