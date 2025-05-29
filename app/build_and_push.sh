@@ -2,7 +2,9 @@
 set -e
 
 echo "🔨 Building Docker image from ./app..."
-docker build -t "$ECR_REPO:$IMAGE_TAG" ./app
+docker build -t "$ECR_REPO:$IMAGE_TAG" .
+
+echo "📦 Target ECR: $ECR_REPO"
 
 echo "📤 Pushing image to ECR..."
 docker push "$ECR_REPO:$IMAGE_TAG"
