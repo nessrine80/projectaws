@@ -1,0 +1,20 @@
+* [33mf4098b9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m change image
+* [33m9bc3734[m change image
+* [33m4108106[m change image
+* [33m6a87b6d[m[33m ([m[1;31morigin/master[m[33m)[m change image
+* [33m73128c0[m fix: use working-directory for build script
+* [33m9e5ae08[m change image
+* [33m8c88efc[m fix: stable Dockerfile with Ubuntu 22.04 and pip install
+* [33mdfa8bab[m change image
+* [33m7776df2[m change image
+* [33m412c7be[m change image
+* [33m0e5713b[m change image
+* [33m71be59b[m change image
+* [33m8aeb61c[m change image
+* [33m4364a96[m change image
+* [33mad33ba1[m workflows and script
+* [33m4922e29[m ingress
+* [33mca0f5dc[m Ignore .terraform pour éviter les fichiers géants
+* [33m7bedd5b[m Supprime .terraform du dépôt et ignore-le
+* [33m30a71a1[m first push
+* [33m48bdb6d[m Premier commit
