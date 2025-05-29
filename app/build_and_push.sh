@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-echo "🔨 Building Docker image..."
-docker build -t "$ECR_REPO:$IMAGE_TAG" .
+echo "🔨 Building Docker image from ./app..."
+docker build -t "$ECR_REPO:$IMAGE_TAG" ./app
 
 echo "📤 Pushing image to ECR..."
 docker push "$ECR_REPO:$IMAGE_TAG"
