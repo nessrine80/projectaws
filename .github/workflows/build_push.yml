@@ -12,13 +12,13 @@ jobs:
 
     defaults:
       run:
-        working-directory: app
+        working-directory: ./app
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker CLI
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Configure AWS credentials
@@ -28,13 +28,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      - name: Login to Amazon ECR
+      - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Run build_and_push.sh script
+      - name: Build and push Docker image
         env:
           ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
           chmod +x build_and_push.sh

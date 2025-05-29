@@ -1,13 +1,16 @@
 #!/bin/bash
+
+# Exit on any error
 set -e
 
-echo "🔨 Building Docker image from ./app..."
-docker build -t "$ECR_REPO:$IMAGE_TAG" .
+# Print each command (for debug)
+set -x
 
-echo "📤 Pushing image to ECR..."
-docker push "$ECR_REPO:$IMAGE_TAG"
+# Full ECR image URI
+IMAGE_URI="$ECR_REPO:$IMAGE_TAG"
 
-echo "✅ Image pushed: $ECR_REPO:$IMAGE_TAG"
+# Build the Docker image
+docker build -t "$IMAGE_URI" .
 
-# Optionally export for future steps
-echo "IMAGE_URI=$ECR_REPO:$IMAGE_TAG" >> $GITHUB_ENV
+# Push the image to ECR
+docker push "$IMAGE_URI"
