@@ -27,11 +27,11 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Run build_push.sh script
+      - name: Run build_and_push.sh script
         env:
           ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          chmod +x ./build_push.sh
-          ./build_push.sh
+          chmod +x ./build_and_push.sh
+          ./build_and_push.sh
