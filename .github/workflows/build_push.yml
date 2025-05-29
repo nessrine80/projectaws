@@ -10,6 +10,10 @@ jobs:
     if: github.event.head_commit.message == 'change image'
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: app
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,5 +37,5 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          chmod +x ./app/build_and_push.sh
-          ./app/build_and_push.sh
+          chmod +x build_and_push.sh
+          ./build_and_push.sh
