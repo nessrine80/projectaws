@@ -4,7 +4,7 @@ set -e
 echo "📦 Getting latest image tag..."
 TAG=$(aws ecr describe-images \
   --repository-name "$ECR_REPO_NAME" \
-  --region "$AWS_DEFAULT_REGION" \
+  --region "eu-west-1" \
   --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' \
   --output text)
 
