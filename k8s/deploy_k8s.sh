@@ -8,7 +8,7 @@ TAG=$(aws ecr describe-images \
   --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' \
   --output text)
 
-IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_ACCOUNT_ID}:$TAG"
+IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-1.amazonaws.com/${AWS_ACCOUNT_ID}:$TAG"
 echo "Using image: $IMAGE_URI"
 
 echo "📝 Updating manifest..."
