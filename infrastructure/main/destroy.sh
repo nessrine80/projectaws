@@ -2,10 +2,10 @@
 set -e
 
 echo "🧹 Nettoyage du dépôt ECR..."
-IMAGE_IDS=$(aws ecr list-images --repository-name "$ECR_REPO_NAME" --region "$AWS_DEFAULT_REGION" --query 'imageIds[*]' --output json)
+IMAGE_IDS=$(aws ecr list-images --repository-name "mon-app" --region "us-east-1" --query 'imageIds[*]' --output json)
 
 if [[ "$IMAGE_IDS" != "[]" ]]; then
-  aws ecr batch-delete-image --repository-name "$ECR_REPO_NAME" --region "$AWS_DEFAULT_REGION" --image-ids "$IMAGE_IDS"
+  aws ecr batch-delete-image --repository-name "mon-app" --region "us-east-1" --image-ids "$IMAGE_IDS"
 else
   echo "✅ Aucun tag à supprimer."
 fi

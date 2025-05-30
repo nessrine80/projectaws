@@ -4,11 +4,11 @@ set -e
 echo "📦 Getting latest image tag..."
 TAG=$(aws ecr describe-images \
   --repository-name "mon-app" \
-  --region "eu-west-1" \
+  --region "us-east-1" \
   --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' \
   --output text)
 
-IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-1.amazonaws.com/${AWS_ACCOUNT_ID}:$TAG"
+IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${AWS_ACCOUNT_ID}:$TAG"
 echo "Using image: $IMAGE_URI"
 
 echo "📝 Updating manifest..."

@@ -113,6 +113,6 @@ module "eks" {
 # ECR image repo
 module "ecr" {
   source = "../modules/ecr"
-  name   = "llm-app"
+  name   = "mon-app"
   tags   = local.common_tags
 }
