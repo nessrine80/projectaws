@@ -12,7 +12,7 @@ COPY backend /backend
 COPY frontend /frontend
 
 # Install Python packages
-RUN pip3 install --break-system-packages -r /backend/requirements.txt
+RUN pip3 install -r /backend/requirements.txt
 
 # Set working directory
 WORKDIR /backend
@@ -20,6 +20,3 @@ WORKDIR /backend
 EXPOSE 8080
 
 CMD ["python3", "app.py"]
-#test# fake change
-# fake change
-# fake change
