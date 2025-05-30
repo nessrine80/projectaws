@@ -14,3 +14,4 @@ docker build -t "$IMAGE_URI" .
 
 # Push the image to ECR
 docker push "$IMAGE_URI"
+echo "done"
