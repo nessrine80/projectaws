@@ -28,4 +28,3 @@ jobs:
         run: |
           chmod +x ./deploy.sh
           ./deploy.sh
-#
