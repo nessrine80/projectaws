@@ -30,7 +30,7 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name hr-stag-eksdemo1 --region ${{ secrets.AWS_DEFAULT_REGION }}
+        run: aws eks update-kubeconfig --name Mycluster --region ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Run deploy_k8s.sh script
         env:
