@@ -1,10 +1,7 @@
-# Global
-aws_region        = "us-east-1"
-environment       = "dev"
-business_division = "HR"
-project_name = "mon-projet"
+aws_region       = "us-east-1"
+environment      = "stag"
+business_division = "hr"
 
-# VPC Configuration
 vpc_name                               = "myvpc"
 vpc_cidr_block                         = "10.0.0.0/16"
 vpc_public_subnets                     = ["10.0.101.0/24", "10.0.102.0/24"]
@@ -14,16 +11,13 @@ vpc_create_database_subnet_group       = true
 vpc_create_database_subnet_route_table = true
 vpc_enable_nat_gateway                 = true
 vpc_single_nat_gateway                 = true
-azs                                    = ["us-east-1a", "us-east-1b"]
 
-# EKS Cluster
-cluster_name                         = "Mycluster"
-cluster_version                      = "1.29"
-cluster_service_ipv4_cidr           = null
-cluster_endpoint_private_access     = false
-cluster_endpoint_public_access      = true
-cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
-
-# EC2 Bastion Host or Node Group
 instance_type    = "t3.micro"
 instance_keypair = "llm"
+
+cluster_name                         = "eksdemo1"
+cluster_service_ipv4_cidr            = "172.20.0.0/16"
+cluster_version                      = "1.26"
+cluster_endpoint_private_access      = false
+cluster_endpoint_public_access       = true
+cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]

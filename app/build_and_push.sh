@@ -5,7 +5,7 @@ set -x
 # Variables obligatoires
 AWS_ACCOUNT_ID="499845095635"
 AWS_REGION="us-east-1"
-REPOSITORY_NAME="mon-app"
+REPOSITORY_NAME="llm-app"
 IMAGE_TAG="${IMAGE_TAG:-latest}"  # fallback to 'latest' if undefined
 
 # Construire l'URI complet de l'image

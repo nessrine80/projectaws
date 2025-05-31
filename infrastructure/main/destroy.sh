@@ -1,15 +1,10 @@
 #!/bin/bash
-set -e
 
-echo "🧹 Nettoyage du dépôt ECR..."
-IMAGE_IDS=$(aws ecr list-images --repository-name "mon-app" --region "us-east-1" --query 'imageIds[*]' --output json)
+set -euo pipefail
 
-if [[ "$IMAGE_IDS" != "[]" ]]; then
-  aws ecr batch-delete-image --repository-name "mon-app" --region "us-east-1" --image-ids "$IMAGE_IDS"
-else
-  echo "✅ Aucun tag à supprimer."
-fi
+echo "🧨 Terraform destroy en cours..."
 
-echo "🧨 Destruction de l'infrastructure Terraform..."
-terraform init
-terraform destroy --auto-approve
+terraform destroy -var-file="terraform.tfvars" -auto-approve
+
+echo "✅ Infrastructure détruite avec succès."
+

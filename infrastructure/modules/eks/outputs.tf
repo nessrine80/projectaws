@@ -1,44 +1,49 @@
 output "cluster_id" {
-  description = "The ID of the EKS cluster"
   value       = aws_eks_cluster.eks.id
-}
-
-output "cluster_endpoint" {
-  description = "The endpoint of the EKS cluster"
-  value       = aws_eks_cluster.eks.endpoint
-}
-
-output "cluster_certificate" {
-  description = "The EKS cluster certificate"
-  value       = aws_eks_cluster.eks.certificate_authority[0].data
-}
-
-output "node_group_id" {
-  description = "EKS Node Group ID"
-  value       = aws_eks_node_group.eks_nodes.id
-}
-
-output "node_group_status" {
-  description = "EKS Node Group Status"
-  value       = aws_eks_node_group.eks_nodes.status
+  description = "EKS Cluster ID"
 }
 
 output "cluster_arn" {
-  description = "ARN of the EKS cluster"
   value       = aws_eks_cluster.eks.arn
+  description = "EKS Cluster ARN"
+}
+
+output "cluster_name" {
+  value       = aws_eks_cluster.eks.name
+  description = "EKS Cluster name"
+}
+
+output "cluster_endpoint" {
+  value       = aws_eks_cluster.eks.endpoint
+  description = "EKS API endpoint"
 }
 
 output "cluster_certificate_authority_data" {
-  description = "Cluster CA data"
   value       = aws_eks_cluster.eks.certificate_authority[0].data
+  description = "Cluster CA cert (base64)"
 }
 
-output "cluster_oidc_issuer_url" {
-  description = "OIDC issuer URL"
+output "oidc_issuer_url" {
   value       = aws_eks_cluster.eks.identity[0].oidc[0].issuer
+  description = "OIDC issuer URL"
 }
 
-output "node_group_public_id" {
-  description = "Node group name"
-  value       = aws_eks_node_group.eks_nodes.node_group_name
+output "primary_security_group_id" {
+  value       = aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id
+  description = "Primary EKS SG ID"
+}
+
+output "node_group_id" {
+  value       = aws_eks_node_group.public.id
+  description = "Node group ID"
+}
+
+output "node_group_status" {
+  value       = aws_eks_node_group.public.status
+  description = "Node group status"
+}
+
+output "node_group_version" {
+  value       = aws_eks_node_group.public.version
+  description = "Node group Kubernetes version"
 }

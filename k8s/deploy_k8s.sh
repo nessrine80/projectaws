@@ -2,21 +2,21 @@
 set -e
 
 echo "📦 Getting latest image tag..."
+
+REPO_NAME="llm-app"
+REGION="us-east-1"
+ACCOUNT_ID="499845095635"
+
+# Récupère le dernier tag (optionnel, selon ta logique)
 TAG=$(aws ecr describe-images \
-  --repository-name "mon-app" \
-  --region "us-east-1" \
+  --repository-name "$REPO_NAME" \
+  --region "$REGION" \
   --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' \
   --output text)
 
-IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${AWS_ACCOUNT_ID}:$TAG"
-echo "Using image: $IMAGE_URI"
+echo "🖼️  Using image tag: $TAG"
 
-echo "📝 Updating manifest..."
-sed -i "s|image:.*|image: $IMAGE_URI|" deployment.yml
-cat deployment.yml
-
-echo "🚀 Deploying to Kubernetes..."
+# Applique les YAML
 kubectl apply -f deployment.yml
 kubectl apply -f svc.yml
 kubectl apply -f ingress.yml
-

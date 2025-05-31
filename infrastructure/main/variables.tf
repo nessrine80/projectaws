@@ -1,147 +1,103 @@
-# ================================
-# Global
-# ================================
 variable "aws_region" {
-  description = "AWS region to deploy resources in"
-  type        = string
   default     = "us-east-1"
+  description = "AWS region"
 }
 
 variable "environment" {
-  description = "Environment name (e.g., dev, stag, prod)"
-  type        = string
   default     = "stag"
+  description = "Environment name"
 }
 
 variable "business_division" {
-  description = "Business division or team"
-  type        = string
   default     = "hr"
+  description = "Business unit"
 }
 
-variable "project_name" {
-  description = "Project name"
-  type        = string
-}
-
-variable "kubeconfig_path" {
-  description = "Path to kubeconfig to access the Kubernetes cluster"
-  type        = string
-  default     = "C:\\Users\\User\\.kube\\config"
-}
-
-# ================================
-# VPC
-# ================================
 variable "vpc_name" {
-  description = "Name of the VPC"
-  type        = string
   default     = "myvpc"
+  description = "Name of the VPC"
 }
 
 variable "vpc_cidr_block" {
-  description = "CIDR block for the VPC"
-  type        = string
   default     = "10.0.0.0/16"
-}
-
-variable "azs" {
-  description = "List of availability zones"
-  type        = list(string)
+  description = "VPC CIDR block"
 }
 
 variable "vpc_public_subnets" {
-  description = "List of public subnet CIDRs"
-  type        = list(string)
   default     = ["10.0.101.0/24", "10.0.102.0/24"]
+  description = "Public subnets"
 }
 
 variable "vpc_private_subnets" {
-  description = "List of private subnet CIDRs"
-  type        = list(string)
   default     = ["10.0.1.0/24", "10.0.2.0/24"]
+  description = "Private subnets"
 }
 
 variable "vpc_database_subnets" {
-  description = "List of database subnet CIDRs"
-  type        = list(string)
   default     = ["10.0.151.0/24", "10.0.152.0/24"]
-}
-
-variable "vpc_enable_nat_gateway" {
-  description = "Enable NAT gateway"
-  type        = bool
-  default     = true
-}
-
-variable "vpc_single_nat_gateway" {
-  description = "Use a single NAT gateway for cost efficiency"
-  type        = bool
-  default     = true
+  description = "Database subnets"
 }
 
 variable "vpc_create_database_subnet_group" {
-  description = "Whether to create DB subnet group"
-  type        = bool
   default     = true
+  type        = bool
+  description = "Create DB subnet group"
 }
 
 variable "vpc_create_database_subnet_route_table" {
-  description = "Whether to create DB subnet route table"
-  type        = bool
   default     = true
-}
-
-# ================================
-# EKS
-# ================================
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
-  default     = "Mycluster"
-}
-
-variable "cluster_version" {
-  description = "EKS Kubernetes version"
-  type        = string
-  default     = "1.26"
-}
-
-variable "cluster_service_ipv4_cidr" {
-  description = "Kubernetes service CIDR block"
-  type        = string
-  default     = "172.20.0.0/16"
-}
-
-variable "cluster_endpoint_private_access" {
-  description = "Enable private endpoint access for the cluster"
   type        = bool
-  default     = false
+  description = "Create DB subnet RT"
 }
 
-variable "cluster_endpoint_public_access" {
-  description = "Enable public endpoint access for the cluster"
-  type        = bool
+variable "vpc_enable_nat_gateway" {
   default     = true
+  type        = bool
+  description = "Enable NAT Gateway"
 }
 
-variable "cluster_endpoint_public_access_cidrs" {
-  description = "List of CIDRs allowed to access the public endpoint"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
+variable "vpc_single_nat_gateway" {
+  default     = true
+  type        = bool
+  description = "Use single NAT"
 }
 
-# ================================
-# EC2
-# ================================
 variable "instance_type" {
-  description = "Type of the EC2 instance for bastion"
-  type        = string
   default     = "t3.micro"
+  description = "EC2 instance type"
 }
 
 variable "instance_keypair" {
-  description = "SSH key pair for EC2 and EKS nodes"
-  type        = string
   default     = "llm"
+  description = "SSH key pair"
+}
+
+variable "cluster_name" {
+  default     = "eksdemo1"
+  description = "EKS cluster name"
+}
+
+variable "cluster_service_ipv4_cidr" {
+  default     = "172.20.0.0/16"
+  description = "Kubernetes service CIDR"
+}
+
+variable "cluster_version" {
+  default     = "1.26"
+  description = "Kubernetes version"
+}
+
+variable "cluster_endpoint_private_access" {
+  default     = false
+  type        = bool
+}
+
+variable "cluster_endpoint_public_access" {
+  default     = true
+  type        = bool
+}
+
+variable "cluster_endpoint_public_access_cidrs" {
+  default     = ["0.0.0.0/0"]
+  type        = list(string)
 }

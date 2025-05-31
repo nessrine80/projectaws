@@ -11,10 +11,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Zones de disponibilité
-data "aws_availability_zones" "available" {}
-
-# AMI Amazon Linux 2 pour EC2 Bastion
 data "aws_ami" "amzlinux2" {
   most_recent = true
   owners      = ["amazon"]
@@ -35,17 +31,38 @@ data "aws_ami" "amzlinux2" {
     values = ["x86_64"]
   }
 }
+data "aws_eks_cluster" "this" {
+  name = module.eks.cluster_name
+}
+
+data "aws_eks_cluster_auth" "this" {
+  name = module.eks.cluster_name
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.this.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.this.token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.this.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.this.token
+  }
+}
+
 
 locals {
   name        = "${var.business_division}-${var.environment}"
   common_tags = {
+    owners      = var.business_division
     environment = var.environment
-    owner       = var.business_division
   }
   eks_cluster_name = "${local.name}-${var.cluster_name}"
 }
 
-# --- VPC ---
 module "vpc" {
   source = "../modules/vpc"
 
@@ -62,56 +79,55 @@ module "vpc" {
   common_tags                            = local.common_tags
 }
 
-
-
-# --- Security Group Bastion ---
-module "public_bastion_sg" {
-  source              = "../modules/security_group"
-  name                = "${local.name}-public-bastion-sg"
-  description         = "Allow SSH access from anywhere"
+module "security_group" {
+  source              = "../modules/security-group"
+  sg_name             = "${local.name}-public-bastion-sg"
   vpc_id              = module.vpc.vpc_id
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  egress_rules        = ["all-all"]
-  tags                = local.common_tags
+  common_tags         = local.common_tags
 }
 
-# --- Bastion EC2 ---
-module "ec2_bastion" {
-  source                 = "../modules/ec2_bastion"
-  name                   = "${local.name}-bastion"
-  ami                    = data.aws_ami.amzlinux2.id
-  instance_type          = var.instance_type
-  key_name               = var.instance_keypair
-  subnet_id              = module.vpc.public_subnets[0]
-  vpc_security_group_ids = [module.public_bastion_sg.security_group_id]
-  tags                   = local.common_tags
+module "ec2" {
+  source             = "../modules/ec2"
+  name               = local.name
+  ami                = data.aws_ami.amzlinux2.id
+  instance_type      = var.instance_type
+  instance_keypair   = var.instance_keypair
+  subnet_id          = module.vpc.public_subnets[0]
+  security_group_ids = [module.security_group.security_group_id]
+  common_tags        = local.common_tags
 }
 
-# --- EKS ---
-module "eks" {
-  source = "../modules/eks"
-
-  cluster_name                          = var.cluster_name
-  cluster_version                       = var.cluster_version
-  cluster_service_ipv4_cidr            = var.cluster_service_ipv4_cidr
-  cluster_endpoint_private_access      = var.cluster_endpoint_private_access
-  cluster_endpoint_public_access       = var.cluster_endpoint_public_access
-  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-
-  subnet_ids        = module.vpc.private_subnets
-  instance_type     = var.instance_type
-  key_name          = var.instance_keypair
-  node_group_name   = "default-node-group"
-  eks_master_role_name = "eks-master-role"
-  eks_node_role_name   = "eks-nodegroup-role"
-
-  name_prefix = local.name
-  tags        = local.common_tags
-}
-
-# --- ECR ---
 module "ecr" {
-  source = "../modules/ecr"
-  name   = "mon-app"
-  tags   = local.common_tags
+  source          = "../modules/ecr"
+  repository_name = "llm-app"
+  common_tags     = local.common_tags
 }
+
+module "eks" {
+  source                           = "../modules/eks"
+  name                             = local.name
+  cluster_name                     = var.cluster_name
+  cluster_service_ipv4_cidr       = var.cluster_service_ipv4_cidr
+  cluster_version                  = var.cluster_version
+  subnet_ids                       = module.vpc.public_subnets
+  endpoint_private_access          = var.cluster_endpoint_private_access
+  endpoint_public_access           = var.cluster_endpoint_public_access
+  endpoint_public_access_cidrs     = var.cluster_endpoint_public_access_cidrs
+  instance_keypair                 = var.instance_keypair
+}
+
+module "monitoring" {
+  source        = "../modules/monitoring"
+  namespace     = "monitoring"
+  chart_version = "56.6.0"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+
+  depends_on = [module.eks]
+
+}
+

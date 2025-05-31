@@ -1,78 +1,44 @@
+variable "name" {
+  description = "Prefix for naming resources"
+  type        = string
+}
+
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
 }
 
-variable "cluster_version" {
-  description = "Kubernetes version for the cluster"
-  type        = string
-}
-
 variable "cluster_service_ipv4_cidr" {
-  description = "CIDR block for Kubernetes service IPs"
+  description = "Service CIDR block for EKS"
   type        = string
-  default     = null
 }
 
-variable "cluster_endpoint_private_access" {
-  description = "Whether the EKS private API server endpoint is enabled"
+variable "cluster_version" {
+  description = "Kubernetes version"
+  type        = string
+}
+
+variable "endpoint_private_access" {
+  description = "Enable private endpoint for EKS"
   type        = bool
-  default     = false
 }
 
-variable "cluster_endpoint_public_access" {
-  description = "Whether the EKS public API server endpoint is enabled"
+variable "endpoint_public_access" {
+  description = "Enable public endpoint for EKS"
   type        = bool
-  default     = true
 }
 
-variable "cluster_endpoint_public_access_cidrs" {
-  description = "List of CIDR blocks allowed to access EKS public API"
+variable "endpoint_public_access_cidrs" {
+  description = "CIDR blocks for public access"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
 }
 
 variable "subnet_ids" {
-  description = "List of subnet IDs for the EKS cluster"
+  description = "List of subnet IDs for the EKS cluster and node group"
   type        = list(string)
 }
 
-variable "instance_type" {
-  description = "Instance type for EKS worker nodes"
-  type        = string
-  default     = "t3.medium"
-}
-
-variable "key_name" {
-  description = "Name of the EC2 key pair for SSH access"
-  type        = string
-}
-
-variable "node_group_name" {
-  description = "Name of the node group"
-  type        = string
-  default     = "default-node-group"
-}
-
-variable "eks_master_role_name" {
-  description = "IAM role name for EKS control plane"
-  type        = string
-  default     = "eks-master-role"
-}
-
-variable "eks_node_role_name" {
-  description = "IAM role name for EKS worker nodes"
-  type        = string
-  default     = "eks-nodegroup-role"
-}
-
-variable "tags" {
-  description = "Tags to apply to all resources"
-  type        = map(string)
-  default     = {}
-}
-
-variable "name_prefix" {
-  description = "Prefix for resource naming"
+variable "instance_keypair" {
+  description = "SSH key pair for remote access"
   type        = string
 }
