@@ -19,4 +19,4 @@ echo "🖼️  Using image tag: $TAG"
 # Applique les YAML
 kubectl apply -f deployment.yml
 kubectl apply -f svc.yml
-
+#
