@@ -1,15 +1,10 @@
 variable "name" {
-  description = "Prefix for naming resources"
+  description = "Prefix for resource names"
   type        = string
 }
 
 variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
-}
-
-variable "cluster_service_ipv4_cidr" {
-  description = "Service CIDR block for EKS"
+  description = "EKS cluster name"
   type        = string
 }
 
@@ -18,27 +13,32 @@ variable "cluster_version" {
   type        = string
 }
 
-variable "endpoint_private_access" {
-  description = "Enable private endpoint for EKS"
-  type        = bool
-}
-
-variable "endpoint_public_access" {
-  description = "Enable public endpoint for EKS"
-  type        = bool
-}
-
-variable "endpoint_public_access_cidrs" {
-  description = "CIDR blocks for public access"
-  type        = list(string)
+variable "cluster_service_ipv4_cidr" {
+  description = "Service CIDR for EKS"
+  type        = string
 }
 
 variable "subnet_ids" {
-  description = "List of subnet IDs for the EKS cluster and node group"
+  description = "Subnets for EKS and node group"
   type        = list(string)
 }
 
+variable "endpoint_private_access" {
+  type        = bool
+  default     = false
+}
+
+variable "endpoint_public_access" {
+  type        = bool
+  default     = true
+}
+
+variable "endpoint_public_access_cidrs" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
 variable "instance_keypair" {
-  description = "SSH key pair for remote access"
+  description = "SSH key pair name"
   type        = string
 }

@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: llm-app
-  labels:
-    app: llm-app
 spec:
   replicas: 1
   selector:
@@ -14,16 +12,10 @@ spec:
       labels:
         app: llm-app
     spec:
+      imagePullSecrets:
+        - name: ecr-creds
       containers:
         - name: llm-app
-          image: 499845095635.dkr.ecr.us-east-1.amazonaws.com/mon-app
+          image: 499845095635.dkr.ecr.us-east-1.amazonaws.com/llm-app:36
           ports:
             - containerPort: 8080
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "256Mi"
-              cpu: "250m"
-

@@ -127,6 +127,7 @@ module "monitoring" {
     helm       = helm
   }
 
+
   depends_on = [module.eks]
 
 }
