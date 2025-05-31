@@ -2,6 +2,7 @@
 aws_region        = "us-east-1"
 environment       = "dev"
 business_division = "HR"
+project_name = "mon-projet"
 
 # VPC Configuration
 vpc_name                               = "myvpc"
