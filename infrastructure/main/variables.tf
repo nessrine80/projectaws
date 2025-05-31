@@ -1,16 +1,11 @@
+# ================================
+# Global
+# ================================
 variable "aws_region" {
   description = "AWS region to deploy resources in"
   type        = string
   default     = "us-east-1"
 }
-
-
-variable "kubeconfig_path" {
-  description = "Path to kubeconfig to access the Kubernetes cluster"
-  type        = string
-  default     = "C:\\Users\\User\\.kube\\config"
-}
-
 
 variable "environment" {
   description = "Environment name (e.g., dev, stag, prod)"
@@ -24,7 +19,20 @@ variable "business_division" {
   default     = "hr"
 }
 
+variable "project_name" {
+  description = "Project name"
+  type        = string
+}
+
+variable "kubeconfig_path" {
+  description = "Path to kubeconfig to access the Kubernetes cluster"
+  type        = string
+  default     = "C:\\Users\\User\\.kube\\config"
+}
+
+# ================================
 # VPC
+# ================================
 variable "vpc_name" {
   description = "Name of the VPC"
   type        = string
@@ -35,6 +43,11 @@ variable "vpc_cidr_block" {
   description = "CIDR block for the VPC"
   type        = string
   default     = "10.0.0.0/16"
+}
+
+variable "azs" {
+  description = "List of availability zones"
+  type        = list(string)
 }
 
 variable "vpc_public_subnets" {
@@ -55,18 +68,6 @@ variable "vpc_database_subnets" {
   default     = ["10.0.151.0/24", "10.0.152.0/24"]
 }
 
-variable "vpc_create_database_subnet_group" {
-  description = "Whether to create DB subnet group"
-  type        = bool
-  default     = true
-}
-
-variable "vpc_create_database_subnet_route_table" {
-  description = "Whether to create DB subnet route table"
-  type        = bool
-  default     = true
-}
-
 variable "vpc_enable_nat_gateway" {
   description = "Enable NAT gateway"
   type        = bool
@@ -79,23 +80,37 @@ variable "vpc_single_nat_gateway" {
   default     = true
 }
 
+variable "vpc_create_database_subnet_group" {
+  description = "Whether to create DB subnet group"
+  type        = bool
+  default     = true
+}
+
+variable "vpc_create_database_subnet_route_table" {
+  description = "Whether to create DB subnet route table"
+  type        = bool
+  default     = true
+}
+
+# ================================
 # EKS
+# ================================
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "MyCluster"
-}
-
-variable "cluster_service_ipv4_cidr" {
-  description = "Kubernetes service CIDR block"
-  type        = string
-  default     = "172.20.0.0/16"
+  default     = "Mycluster"
 }
 
 variable "cluster_version" {
   description = "EKS Kubernetes version"
   type        = string
   default     = "1.26"
+}
+
+variable "cluster_service_ipv4_cidr" {
+  description = "Kubernetes service CIDR block"
+  type        = string
+  default     = "172.20.0.0/16"
 }
 
 variable "cluster_endpoint_private_access" {
@@ -116,7 +131,9 @@ variable "cluster_endpoint_public_access_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
+# ================================
 # EC2
+# ================================
 variable "instance_type" {
   description = "Type of the EC2 instance for bastion"
   type        = string

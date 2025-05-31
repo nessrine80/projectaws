@@ -11,10 +11,10 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Get all availability zones
+# Zones de disponibilité
 data "aws_availability_zones" "available" {}
 
-# Get latest Amazon Linux 2 AMI for ec2_bastion module
+# AMI Amazon Linux 2 pour EC2 Bastion
 data "aws_ami" "amzlinux2" {
   most_recent = true
   owners      = ["amazon"]
@@ -40,31 +40,31 @@ locals {
   name        = "${var.business_division}-${var.environment}"
   common_tags = {
     environment = var.environment
-    owners      = var.business_division
+    owner       = var.business_division
   }
   eks_cluster_name = "${local.name}-${var.cluster_name}"
 }
 
-# VPC module
+# --- VPC ---
 module "vpc" {
   source = "../modules/vpc"
 
-  vpc_name                                = var.vpc_name
-  vpc_cidr_block                          = var.vpc_cidr_block
-  vpc_public_subnets                      = var.vpc_public_subnets
-  vpc_private_subnets                     = var.vpc_private_subnets
-  vpc_database_subnets                    = var.vpc_database_subnets
-  vpc_create_database_subnet_group        = var.vpc_create_database_subnet_group
-  vpc_create_database_subnet_route_table  = var.vpc_create_database_subnet_route_table
-  vpc_enable_nat_gateway                  = var.vpc_enable_nat_gateway
-  vpc_single_nat_gateway                  = var.vpc_single_nat_gateway
-
-  azs                = data.aws_availability_zones.available.names
-  tags               = local.common_tags
-  eks_cluster_name   = local.eks_cluster_name
+  vpc_name                               = var.vpc_name
+  vpc_cidr_block                         = var.vpc_cidr_block
+  vpc_public_subnets                     = var.vpc_public_subnets
+  vpc_private_subnets                    = var.vpc_private_subnets
+  vpc_database_subnets                   = var.vpc_database_subnets
+  vpc_create_database_subnet_group       = var.vpc_create_database_subnet_group
+  vpc_create_database_subnet_route_table = var.vpc_create_database_subnet_route_table
+  vpc_enable_nat_gateway                 = var.vpc_enable_nat_gateway
+  vpc_single_nat_gateway                 = var.vpc_single_nat_gateway
+  eks_cluster_name                       = local.eks_cluster_name
+  common_tags                            = local.common_tags
 }
 
-# Security group for bastion host
+
+
+# --- Security Group Bastion ---
 module "public_bastion_sg" {
   source              = "../modules/security_group"
   name                = "${local.name}-public-bastion-sg"
@@ -75,10 +75,10 @@ module "public_bastion_sg" {
   tags                = local.common_tags
 }
 
-# EC2 bastion host
+# --- Bastion EC2 ---
 module "ec2_bastion" {
   source                 = "../modules/ec2_bastion"
-  name                   = "${local.name}-BastionHost"
+  name                   = "${local.name}-bastion"
   ami                    = data.aws_ami.amzlinux2.id
   instance_type          = var.instance_type
   key_name               = var.instance_keypair
@@ -87,21 +87,21 @@ module "ec2_bastion" {
   tags                   = local.common_tags
 }
 
+# --- EKS ---
 module "eks" {
   source = "../modules/eks"
 
-  cluster_name                          = "Mycluster"
-  cluster_version                       = "1.29"
-  cluster_service_ipv4_cidr            = "172.20.0.0/16"
-  cluster_endpoint_private_access      = false
-  cluster_endpoint_public_access       = true
-  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
+  cluster_name                          = var.cluster_name
+  cluster_version                       = var.cluster_version
+  cluster_service_ipv4_cidr            = var.cluster_service_ipv4_cidr
+  cluster_endpoint_private_access      = var.cluster_endpoint_private_access
+  cluster_endpoint_public_access       = var.cluster_endpoint_public_access
+  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
 
-  subnet_ids      = module.vpc.private_subnets
-  instance_type   = "t3.medium"
-  key_name        = "llm"
-  node_group_name = "default-node-group"
-
+  subnet_ids        = module.vpc.private_subnets
+  instance_type     = var.instance_type
+  key_name          = var.instance_keypair
+  node_group_name   = "default-node-group"
   eks_master_role_name = "eks-master-role"
   eks_node_role_name   = "eks-nodegroup-role"
 
@@ -109,8 +109,7 @@ module "eks" {
   tags        = local.common_tags
 }
 
-
-# ECR image repo
+# --- ECR ---
 module "ecr" {
   source = "../modules/ecr"
   name   = "mon-app"

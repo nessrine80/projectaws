@@ -1,5 +1,5 @@
 variable "vpc_name" {
-  description = "Name of the VPC"
+  description = "VPC Name"
   type        = string
 }
 
@@ -24,36 +24,31 @@ variable "vpc_database_subnets" {
 }
 
 variable "vpc_create_database_subnet_group" {
-  description = "Whether to create a database subnet group"
+  description = "Whether to create DB subnet group"
   type        = bool
 }
 
 variable "vpc_create_database_subnet_route_table" {
-  description = "Whether to create a route table for DB subnets"
+  description = "Whether to create DB subnet route table"
   type        = bool
 }
 
 variable "vpc_enable_nat_gateway" {
-  description = "Enable NAT gateway for outbound internet"
+  description = "Enable NAT Gateway"
   type        = bool
 }
 
 variable "vpc_single_nat_gateway" {
-  description = "Use a single NAT gateway for cost savings"
+  description = "Use single NAT Gateway"
   type        = bool
 }
 
-variable "azs" {
-  description = "List of availability zones"
-  type        = list(string)
-}
-
-variable "tags" {
-  description = "Common tags for resources"
+variable "common_tags" {
+  description = "Common resource tags"
   type        = map(string)
 }
 
 variable "eks_cluster_name" {
-  description = "Used to tag subnets for EKS integration"
+  description = "EKS cluster name (used in subnet tags)"
   type        = string
 }
