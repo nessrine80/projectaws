@@ -16,6 +16,6 @@ spec:
         - name: ecr-creds
       containers:
         - name: llm-app
-          image: 499845095635.dkr.ecr.us-east-1.amazonaws.com/llm-app:36
+          image: 499845095635.dkr.ecr.us-east-1.amazonaws.com/llm-app:56
           ports:
             - containerPort: 8080
