@@ -2,7 +2,7 @@
 
 # ======= CONFIGURATION ========
 REGION="us-east-1"
-BUCKET_NAME="ttf-remote-backend-state-4286"
+BUCKET_NAME="ttf-remote-backend-state-2025"
 DYNAMO_TABLE="terraform-locks"
 STATE_KEY="dev/terraform.tfstate"
 # ==============================
