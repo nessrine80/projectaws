@@ -7,7 +7,7 @@ ENV=${1:-default}
 TFVARS_FILE="terraform.tfvars"
 WORKDIR="$(dirname "$0")"
 
-# Entrer dans le dossier
+# Entrer dans le dossier yes
 cd "$WORKDIR"
 
 echo "🔁 Initialisation de Terraform..."
