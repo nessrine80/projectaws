@@ -42,12 +42,14 @@ data "aws_eks_cluster_auth" "this" {
 }
 
 provider "kubernetes" {
+  alias                  = "eks"
   host                   = data.aws_eks_cluster.this.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.this.token
 }
 
 provider "helm" {
+  alias = "eks"
   kubernetes {
     host                   = data.aws_eks_cluster.this.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
@@ -124,11 +126,10 @@ module "monitoring" {
   namespace     = "monitoring"
   chart_version = "56.6.0"
 
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
+   providers = {
+    kubernetes = kubernetes.eks
+    helm       = helm.eks
   }
-
 
   depends_on = [module.eks]
 
