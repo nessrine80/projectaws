@@ -2,7 +2,7 @@
 set -e
 set -x
 
-# Variables obligatoires
+# Variables obligatoires.
 AWS_ACCOUNT_ID="499845095635"
 AWS_REGION="us-east-1"
 REPOSITORY_NAME="llm-app"
